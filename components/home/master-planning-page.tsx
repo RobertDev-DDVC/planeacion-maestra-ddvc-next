@@ -20,6 +20,7 @@ import { exportPlanDdvcWorkbook } from "@/lib/plan-ddvc-export";
 export function MasterPlanningPage() {
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   async function handleAction(actionId: string) {
     if (actionId !== "plan-ddvc" || activeActionId) {
@@ -28,9 +29,10 @@ export function MasterPlanningPage() {
 
     setActiveActionId(actionId);
     setErrorMessage(null);
+    setWarningMessage(null);
 
     try {
-      await exportPlanDdvcWorkbook({
+      const result = await exportPlanDdvcWorkbook({
         brandPanel,
         supplierPanel,
         parameters: inventoryParameters,
@@ -38,12 +40,14 @@ export function MasterPlanningPage() {
         workdayOptions,
         includeObsolete: true,
       });
+      setWarningMessage(result.warningMessage);
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
           : "No se pudo generar el archivo de Excel.";
       setErrorMessage(message);
+      setWarningMessage(null);
     } finally {
       setActiveActionId(null);
     }
@@ -73,6 +77,11 @@ export function MasterPlanningPage() {
         </div>
         {errorMessage ? (
           <p className="mt-4 text-sm font-medium text-rose-700">{errorMessage}</p>
+        ) : null}
+        {warningMessage ? (
+          <p className="mt-4 text-sm font-medium text-amber-700">
+            {warningMessage}
+          </p>
         ) : null}
       </div>
     </main>
