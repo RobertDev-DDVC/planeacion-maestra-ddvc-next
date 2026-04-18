@@ -19,6 +19,13 @@ type PlanDdvcExportInput = {
 
 type SaveOutcome = "downloaded" | "saved" | "cancelled";
 
+type ExportPlanDdvcResult = {
+  outcome: SaveOutcome;
+  warningMessage: string | null;
+};
+
+type SharePointSyncOutcome = "failed" | "skipped" | "synced";
+
 type PlanDdvcLogEntry = {
   accion: "Plan DDVC";
   fecha: string;
@@ -31,6 +38,11 @@ type PlanDdvcLogEntry = {
     workdays: string[];
   };
   usuario: string;
+};
+
+type LogSnapshot = {
+  content: string;
+  fileName: string;
 };
 
 type PlanDdvcWorkbookData = {
@@ -68,11 +80,15 @@ const MOCK_PRODUCTS = [
 
 export async function exportPlanDdvcWorkbook(
   input: PlanDdvcExportInput,
-): Promise<SaveOutcome> {
+): Promise<ExportPlanDdvcResult> {
   const workbookData = buildPlanDdvcWorkbook(input);
+  let sharePointSyncPromise = Promise.resolve(
+    "skipped" as SharePointSyncOutcome,
+  );
 
   if (window.electronAPI?.writeLog) {
-    await window.electronAPI.writeLog(workbookData.logEntry);
+    const logSnapshot = await window.electronAPI.writeLog(workbookData.logEntry);
+    sharePointSyncPromise = syncDailyLogSnapshot(logSnapshot);
   }
 
   if (window.electronAPI?.saveExcel) {
@@ -80,12 +96,66 @@ export async function exportPlanDdvcWorkbook(
       workbookData.buffer,
       workbookData.defaultName,
     );
+    const sharePointSyncOutcome = await sharePointSyncPromise;
+    const outcome = filePath ? "saved" : "cancelled";
 
-    return filePath ? "saved" : "cancelled";
+    return {
+      outcome,
+      warningMessage: getSharePointWarningMessage(sharePointSyncOutcome, outcome),
+    };
   }
 
   downloadInBrowser(workbookData.buffer, workbookData.defaultName);
-  return "downloaded";
+  const sharePointSyncOutcome = await sharePointSyncPromise;
+  return {
+    outcome: "downloaded",
+    warningMessage: getSharePointWarningMessage(
+      sharePointSyncOutcome,
+      "downloaded",
+    ),
+  };
+}
+
+async function syncDailyLogSnapshot(
+  logSnapshot: LogSnapshot,
+): Promise<SharePointSyncOutcome> {
+  try {
+    const response = await fetch("/api/sharepoint/logs", {
+      body: JSON.stringify(logSnapshot),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      return "failed";
+    }
+
+    const payload = (await response.json()) as { skipped?: boolean };
+    return payload.skipped ? "skipped" : "synced";
+  } catch {
+    return "failed";
+  }
+}
+
+function getSharePointWarningMessage(
+  sharePointSyncOutcome: SharePointSyncOutcome,
+  outcome: SaveOutcome,
+) {
+  if (sharePointSyncOutcome !== "failed") {
+    return null;
+  }
+
+  if (outcome === "saved") {
+    return "El archivo se guardo localmente, pero no se sincronizo el log con SharePoint.";
+  }
+
+  if (outcome === "downloaded") {
+    return "La exportacion se genero, pero no se sincronizo el log con SharePoint.";
+  }
+
+  return "El log local se guardo, pero no se sincronizo con SharePoint.";
 }
 
 function buildPlanDdvcWorkbook(
@@ -320,7 +390,7 @@ function pad(value: number): string {
 }
 
 function downloadInBrowser(buffer: Uint8Array, fileName: string) {
-  const blob = new Blob([buffer], { type: EXCEL_MIME });
+  const blob = new Blob([buffer as BlobPart], { type: EXCEL_MIME });
   const downloadUrl = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
 
