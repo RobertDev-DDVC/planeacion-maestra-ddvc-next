@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import { ActionButtons } from "@/components/home/action-buttons";
 import { FilterPanel } from "@/components/home/filter-panel";
 import { InventoryParametersCard } from "@/components/home/inventory-parameters-card";
@@ -11,8 +15,40 @@ import {
 } from "@/components/home/mock-data";
 import { PageHeader } from "@/components/home/page-header";
 import { RadioCard } from "@/components/home/radio-card";
+import { exportPlanDdvcWorkbook } from "@/lib/plan-ddvc-export";
 
 export function MasterPlanningPage() {
+  const [activeActionId, setActiveActionId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleAction(actionId: string) {
+    if (actionId !== "plan-ddvc" || activeActionId) {
+      return;
+    }
+
+    setActiveActionId(actionId);
+    setErrorMessage(null);
+
+    try {
+      await exportPlanDdvcWorkbook({
+        brandPanel,
+        supplierPanel,
+        parameters: inventoryParameters,
+        originOptions,
+        workdayOptions,
+        includeObsolete: true,
+      });
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "No se pudo generar el archivo de Excel.";
+      setErrorMessage(message);
+    } finally {
+      setActiveActionId(null);
+    }
+  }
+
   return (
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-360 rounded-[34px] border border-white/70 bg-white/88 p-4 panel-shadow backdrop-blur sm:p-6 lg:p-7">
@@ -29,8 +65,15 @@ export function MasterPlanningPage() {
           </div>
         </div>
         <div className="mt-8 xl:ml-auto xl:max-w-155">
-          <ActionButtons actions={actionButtons} />
+          <ActionButtons
+            actions={actionButtons}
+            activeActionId={activeActionId}
+            onAction={handleAction}
+          />
         </div>
+        {errorMessage ? (
+          <p className="mt-4 text-sm font-medium text-rose-700">{errorMessage}</p>
+        ) : null}
       </div>
     </main>
   );
