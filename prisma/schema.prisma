@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model LocalCredential {
+  id        Int      @id @default(autoincrement())
+  username  String
+  password  String
+  date      DateTime @default(now())
+  isActive  Boolean  @default(true)
+
+  @@map("local_credentials")
+}

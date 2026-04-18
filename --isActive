@@ -1,0 +1,7 @@
+Unknown command: "sqlite:add"
+
+
+Did you mean this?
+  npm run sqlite:add # run the "sqlite:add" package script
+To see a list of supported npm commands, run:
+  npm help
