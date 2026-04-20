@@ -1,6 +1,6 @@
 export {};
 
-type ElectronLogSnapshot = {
+export type ElectronLogSnapshot = {
   content: string;
   fileName: string;
 };
@@ -17,3 +17,4 @@ declare global {
     };
   }
 }
+

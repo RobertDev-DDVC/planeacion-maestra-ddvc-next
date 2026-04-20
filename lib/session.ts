@@ -2,30 +2,21 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 import { cookies } from "next/headers";
 
-import type { AuthenticatedUser } from "@/lib/auth-types";
+import type { AuthenticatedUser } from "@/types/auth/authenticated-user.types";
+import type {
+  SessionErrorReason,
+  SessionPayload,
+  SessionReadResult,
+} from "@/types/auth/session.types";
+
+export type { SessionReadResult } from "@/types/auth/session.types";
 
 const SESSION_COOKIE_NAME = "pm-ddvc-session";
 const SESSION_TTL_MS = 10 * 60 * 60 * 1000;
 const SESSION_TTL_SECONDS = SESSION_TTL_MS / 1000;
 
-type SessionPayload = {
-  userId: number;
-  username: string;
-  expiresAt: string;
-};
-
-export type SessionReadResult =
-  | {
-      status: "authenticated";
-      user: AuthenticatedUser;
-      expiresAt: Date;
-    }
-  | {
-      status: "missing" | "expired" | "invalid";
-    };
-
 export class SessionError extends Error {
-  constructor(public readonly reason: "missing" | "expired" | "invalid") {
+  constructor(public readonly reason: SessionErrorReason) {
     super(`Session ${reason}`);
     this.name = "SessionError";
   }

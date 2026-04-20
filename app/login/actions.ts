@@ -8,10 +8,7 @@ import {
   isSqliteNativeBindingError,
 } from "@/lib/credentials";
 import { createSession, readSession, clearSession } from "@/lib/session";
-
-export type LoginActionState = {
-  errorMessage: string | null;
-};
+import type { LoginActionState } from "@/types/login/login-action-state.types";
 
 export async function login(
   _previousState: LoginActionState,

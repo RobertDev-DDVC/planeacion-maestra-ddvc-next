@@ -1,4 +1,4 @@
-import type { CurrentUser } from "@/components/home/types";
+import type { CurrentUser } from "@/types/home/home.types";
 
 type PageHeaderProps = {
   currentUser: CurrentUser;

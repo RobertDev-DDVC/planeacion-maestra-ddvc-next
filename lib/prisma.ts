@@ -1,11 +1,11 @@
 import { ensureSqliteDirectoryExists, toSqliteUrl } from "@/lib/sqlite-config";
+import type {
+  PrismaClientInstance,
+} from "@/types/prisma/prisma-client.types";
 
 const globalForPrisma = globalThis as {
   prisma?: unknown;
 };
-
-type PrismaModule = typeof import("@/generated/prisma/client");
-type PrismaClientInstance = InstanceType<PrismaModule["PrismaClient"]>;
 
 export class SqliteNativeBindingError extends Error {
   override cause?: unknown;

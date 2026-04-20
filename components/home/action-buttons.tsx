@@ -1,5 +1,5 @@
 import { BoxIcon, ClipboardChartIcon } from "@/components/home/home-icons";
-import type { ActionButtonData } from "@/components/home/types";
+import type { ActionButtonData } from "@/types/home/home.types";
 
 type ActionButtonsProps = {
   actions: ActionButtonData[];

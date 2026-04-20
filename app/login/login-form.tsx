@@ -3,8 +3,8 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import type { LoginActionState } from "@/app/login/actions";
 import { login } from "@/app/login/actions";
+import type { LoginActionState } from "@/types/login/login-action-state.types";
 
 type LoginFormProps = {
   initialMessage?: string | null;

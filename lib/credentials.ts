@@ -1,9 +1,9 @@
 import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 
-import type { AuthenticatedUser } from "@/lib/auth-types";
 import { TEST_CREDENTIAL } from "@/lib/auth-types";
 import { getPrisma, isSqliteNativeBindingError } from "@/lib/prisma";
+import type { AuthenticatedUser } from "@/types/auth/authenticated-user.types";
 
 const scrypt = promisify(scryptCallback);
 

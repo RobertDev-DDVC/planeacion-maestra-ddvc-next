@@ -1,7 +1,4 @@
-export type AuthenticatedUser = {
-  id: number;
-  username: string;
-};
+export type { AuthenticatedUser } from "@/types/auth/authenticated-user.types";
 
 export const TEST_CREDENTIAL = {
   username: "usuario.prueba",

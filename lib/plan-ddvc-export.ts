@@ -3,68 +3,14 @@
 import * as XLSX from "xlsx";
 
 import type {
-  FilterPanelData,
-  InventoryParameter,
-  RadioOption,
-} from "@/components/home/types";
-
-type PlanDdvcExportInput = {
-  brandPanel: FilterPanelData;
-  supplierPanel: FilterPanelData;
-  parameters: InventoryParameter[];
-  originOptions: RadioOption[];
-  workdayOptions: RadioOption[];
-  includeObsolete: boolean;
-};
-
-type SaveOutcome = "downloaded" | "saved" | "cancelled";
-
-type ExportPlanDdvcResult = {
-  outcome: SaveOutcome;
-  warningMessage: string | null;
-};
-
-type SharePointSyncOutcome = "failed" | "skipped" | "synced";
-
-type PlanDdvcLogEntry = {
-  accion: "Plan DDVC";
-  fecha: string;
-  filtro: string;
-  origen: string | null;
-  parametros: Record<string, number>;
-  selectionValues: {
-    brands: string[];
-    suppliers: string[];
-    workdays: string[];
-  };
-  usuario: string;
-};
-
-type LogSnapshot = {
-  content: string;
-  fileName: string;
-};
-
-type PlanDdvcWorkbookData = {
-  defaultName: string;
-  buffer: Uint8Array;
-  logEntry: PlanDdvcLogEntry;
-};
-
-type PlanRow = {
-  CompraSugerida: number;
-  DiaOperacion: string;
-  Emergencia: number;
-  Estatus: string;
-  ExistenciaActual: number;
-  Marca: string;
-  Maximo: number;
-  Minimo: number;
-  Origen: string;
-  Producto: string;
-  Proveedor: string;
-  VentaPromedio: number;
-};
+  ExportPlanDdvcResult,
+  LogSnapshot,
+  PlanDdvcExportInput,
+  PlanDdvcWorkbookData,
+  PlanRow,
+  SaveOutcome,
+  SharePointSyncOutcome,
+} from "@/types/export/plan-ddvc-export.types";
 
 const EXCEL_MIME =
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -305,7 +251,7 @@ function buildMockPlanRows({
   });
 }
 
-function normalizeParameters(parameters: InventoryParameter[]) {
+function normalizeParameters(parameters: PlanDdvcExportInput["parameters"]) {
   return parameters.reduce<Record<string, number>>((accumulator, parameter) => {
     accumulator[parameter.id] = parameter.value;
     return accumulator;
@@ -321,11 +267,11 @@ function getSelectedLabels(
     .map((option) => option.label);
 }
 
-function getCheckedLabels(options: RadioOption[]): string[] {
+function getCheckedLabels(options: PlanDdvcExportInput["originOptions"]): string[] {
   return options.filter((option) => option.checked).map((option) => option.label);
 }
 
-function getCheckedLabel(options: RadioOption[]): string | null {
+function getCheckedLabel(options: PlanDdvcExportInput["originOptions"]): string | null {
   return options.find((option) => option.checked)?.label ?? null;
 }
 

@@ -15,7 +15,7 @@ import {
 } from "@/components/home/mock-data";
 import { PageHeader } from "@/components/home/page-header";
 import { RadioCard } from "@/components/home/radio-card";
-import type { CurrentUser } from "@/components/home/types";
+import type { CurrentUser } from "@/types/home/home.types";
 import { exportPlanDdvcWorkbook } from "@/lib/plan-ddvc-export";
 
 type MasterPlanningPageProps = {

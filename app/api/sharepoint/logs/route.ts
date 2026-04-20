@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
 
 import { syncLogFileToSharePoint } from "@/lib/sharepoint-logs";
+import type { SharePointLogRequest } from "@/types/api/sharepoint-logs-route.types";
 
 export const runtime = "nodejs";
-
-type SharePointLogRequest = {
-  content?: unknown;
-  fileName?: unknown;
-};
 
 export async function POST(request: Request) {
   let payload: SharePointLogRequest;
