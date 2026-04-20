@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
-import { PrismaClient } from "../generated/prisma/client.ts";
+import { PrismaClient } from "../generated/prisma/client";
 
 function getArgument(name: string): string | undefined {
   const index = process.argv.indexOf(name);

@@ -29,3 +29,8 @@ export type ActionButtonData = {
   label: string;
   tone: "primary" | "success";
 };
+
+export type CurrentUser = {
+  id: number;
+  username: string;
+};
