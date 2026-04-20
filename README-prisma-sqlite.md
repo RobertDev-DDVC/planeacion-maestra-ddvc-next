@@ -22,6 +22,14 @@ La tabla `local_credentials` contiene:
 
 ## Flujo inicial
 
+### Prerequisito en Windows
+
+`better-sqlite3` necesita que los scripts de instalación estén habilitados. Si tu entorno tiene `ignore-scripts=true`, el archivo nativo `better_sqlite3.node` no se generará y el login fallará al intentar abrir SQLite.
+
+Antes de instalar o reconstruir dependencias, confirma que este workspace tenga:
+
+`ignore-scripts=false`
+
 1. Instala dependencias:
    `pnpm install`
 2. Genera Prisma Client:
@@ -36,6 +44,12 @@ Si solo quieres preparar la carpeta local antes de crear la base:
 Si en tu máquina `prisma db push` falla por runtime del schema engine, puedes inicializar el archivo igual con:
 
 `pnpm sqlite:init`
+
+Si el binding nativo de `better-sqlite3` falta o quedó corrupto:
+
+1. Verifica `pnpm config get ignore-scripts`
+2. Ejecuta `pnpm rebuild better-sqlite3`
+3. Si sigue fallando, reinstala dependencias con scripts habilitados
 
 ## Descargar desde SharePoint
 

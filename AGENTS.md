@@ -105,6 +105,7 @@ Skills live in `.agents/skills/`. **Load the relevant SKILL.md via `read_file` b
 - **No `any` types.** Use proper TypeScript interfaces.
 - **Server Components by default.** Add `"use client"` only when browser APIs or interactivity require it.
 - **Prisma Client singleton** — instantiate once in `lib/prisma.ts`, never in component files.
+- **Native SQLite runtime** — `better-sqlite3` requires install scripts enabled on Windows; if `ignore-scripts=true`, the `.node` binding will be missing and local auth/SQLite access will fail.
 - **Tailwind v4 CSS-first** — define all tokens in `@theme {}` inside `globals.css`. Do not create `tailwind.config.ts`.
 - **No inline styles.** All styling via Tailwind utility classes.
 - **Form validation** — validate on blur and on submit. Never disable the submit button silently without feedback.
@@ -119,4 +120,4 @@ Skills live in `.agents/skills/`. **Load the relevant SKILL.md via `read_file` b
 - Do not put business logic in `pm-electron/main.js`.
 - Do not use `localStorage` for state that must survive Electron reloads — use the SQLite DB instead.
 - Do not generate or guess database URLs — the SQLite file path must come from environment config.
-- Do not implement authentication (out of scope for this app).
+- Do not extend authentication beyond the current local login flow unless explicitly requested.
