@@ -1,3 +1,9 @@
+import type { CurrentUser } from "@/components/home/types";
+
+type PageHeaderProps = {
+  currentUser: CurrentUser;
+};
+
 function BrandPlaceholder() {
   return (
     <div className="flex items-center gap-3 text-white">
@@ -18,19 +24,30 @@ function BrandPlaceholder() {
   );
 }
 
-export function PageHeader() {
+export function PageHeader({ currentUser }: PageHeaderProps) {
   return (
     <header className="rounded-[28px] bg-gradient-to-r from-brand-primary-dark via-brand-primary to-brand-primary-soft px-7 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] sm:px-8">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
-        <BrandPlaceholder />
-        <div className="hidden h-16 w-px bg-white/22 lg:block" />
-        <div className="space-y-1 text-white">
-          <p className="text-sm font-medium uppercase tracking-[0.3em] text-white/70">
-            PM DDVC
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
+          <BrandPlaceholder />
+          <div className="hidden h-16 w-px bg-white/22 lg:block" />
+          <div className="space-y-1 text-white">
+            <p className="text-sm font-medium uppercase tracking-[0.3em] text-white/70">
+              PM DDVC
+            </p>
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-[2.15rem]">
+              Planeación maestra
+            </h1>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-white/14 bg-white/10 px-4 py-3 text-white backdrop-blur">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-white/68">
+            Usuario autenticado
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-[2.15rem]">
-            Planeación maestra
-          </h1>
+          <p className="mt-1 text-lg font-semibold tracking-tight">
+            {currentUser.username}
+          </p>
         </div>
       </div>
     </header>

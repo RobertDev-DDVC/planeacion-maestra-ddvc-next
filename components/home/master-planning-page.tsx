@@ -15,9 +15,14 @@ import {
 } from "@/components/home/mock-data";
 import { PageHeader } from "@/components/home/page-header";
 import { RadioCard } from "@/components/home/radio-card";
+import type { CurrentUser } from "@/components/home/types";
 import { exportPlanDdvcWorkbook } from "@/lib/plan-ddvc-export";
 
-export function MasterPlanningPage() {
+type MasterPlanningPageProps = {
+  currentUser: CurrentUser;
+};
+
+export function MasterPlanningPage({ currentUser }: MasterPlanningPageProps) {
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
@@ -54,9 +59,13 @@ export function MasterPlanningPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+    <main
+      className="min-h-screen px-4 py-6 sm:px-6 lg:px-8"
+      data-user-id={currentUser.id}
+      data-username={currentUser.username}
+    >
       <div className="mx-auto max-w-360 rounded-[34px] border border-white/70 bg-white/88 p-4 panel-shadow backdrop-blur sm:p-6 lg:p-7">
-        <PageHeader />
+        <PageHeader currentUser={currentUser} />
         <div className="mt-6 grid gap-6 xl:grid-cols-[1.05fr_1fr]">
           <FilterPanel data={brandPanel} />
           <FilterPanel data={supplierPanel} />
