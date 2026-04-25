@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { ActionButtons } from "@/components/home/action-buttons";
+import { DimProductoPreview } from "@/components/home/dim-producto-preview";
 import { FilterPanel } from "@/components/home/filter-panel";
 import { InventoryParametersCard } from "@/components/home/inventory-parameters-card";
 import {
@@ -15,9 +16,18 @@ import {
 } from "@/components/home/mock-data";
 import { PageHeader } from "@/components/home/page-header";
 import { RadioCard } from "@/components/home/radio-card";
+import type { DimProductoPreviewItem } from "@/lib/fabric-dim-producto";
 import { exportPlanDdvcWorkbook } from "@/lib/plan-ddvc-export";
 
-export function MasterPlanningPage() {
+type MasterPlanningPageProps = {
+  readonly dimProductoRows: DimProductoPreviewItem[];
+  readonly dimProductoErrorMessage: string | null;
+};
+
+export function MasterPlanningPage({
+  dimProductoRows,
+  dimProductoErrorMessage,
+}: MasterPlanningPageProps) {
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -74,6 +84,10 @@ export function MasterPlanningPage() {
         {errorMessage ? (
           <p className="mt-4 text-sm font-medium text-rose-700">{errorMessage}</p>
         ) : null}
+        <DimProductoPreview
+          rows={dimProductoRows}
+          errorMessage={dimProductoErrorMessage}
+        />
       </div>
     </main>
   );

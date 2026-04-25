@@ -15,7 +15,8 @@
     "sqlite:add": "tsx ./scripts/sqlite-add-user.ts",
     "sqlite:download": "node ./scripts/sharepoint-sqlite-sync.mjs download",
     "sqlite:upload": "node ./scripts/sharepoint-sqlite-sync.mjs upload",
-    "fabric:connection": "tsx ./scripts/fabric-connection.ts"
+    "fabric:connection": "tsx ./scripts/fabric-connection.ts",
+    "fabric:preview:dim-producto": "tsx ./scripts/fabric-preview-dim-producto.ts"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.6.0",
