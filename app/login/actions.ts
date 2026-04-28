@@ -16,14 +16,10 @@ export async function login(
 ): Promise<LoginActionState> {
   const session = await readSession();
 
-  if (session.status === "authenticated") {
-    redirect("/");
-  }
+  if (session.status === "authenticated") redirect("/");
 
-  if (session.status === "expired" || session.status === "invalid") {
-    await clearSession();
-  }
-
+  if (session.status === "expired" || session.status === "invalid") await clearSession();
+  
   const username = formData.get("username");
   const password = formData.get("password");
 
