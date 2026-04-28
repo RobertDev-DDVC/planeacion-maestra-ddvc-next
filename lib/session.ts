@@ -11,9 +11,9 @@ import type {
 
 export type { SessionReadResult } from "@/types/auth/session.types";
 
-const SESSION_COOKIE_NAME = "pm-ddvc-session";
-const SESSION_TTL_MS = 10 * 60 * 60 * 1000;
-const SESSION_TTL_SECONDS = SESSION_TTL_MS / 1000;
+const SESSION_COOKIE_NAME = "pm-ddvc-session"; // Nombre de la cookie para la sesión de autenticación
+const SESSION_TTL_MS = 10 * 60 * 60 * 1000; // 10 horas
+const SESSION_TTL_SECONDS = SESSION_TTL_MS / 1000; // 36000 segundos
 
 export class SessionError extends Error {
   constructor(public readonly reason: SessionErrorReason) {
@@ -22,14 +22,12 @@ export class SessionError extends Error {
   }
 }
 
-export const AUTH_SESSION_COOKIE_NAME = SESSION_COOKIE_NAME;
+export const AUTH_SESSION_COOKIE_NAME = SESSION_COOKIE_NAME; // Exportar el nombre de la cookie para su uso en otras partes de la aplicación
 
 function getSessionSecret(): string {
   const secret = process.env.AUTH_SESSION_SECRET?.trim();
 
-  if (secret) {
-    return secret;
-  }
+  if (secret) return secret;
 
   if (process.env.NODE_ENV === "production") {
     throw new Error("AUTH_SESSION_SECRET es obligatorio en producción.");
