@@ -52,7 +52,7 @@ export function LoginForm({
         </p>
       </div>
 
-      <div className="rounded-2xl border border-brand-primary/12 bg-brand-primary/[0.05] px-4 py-3 text-sm text-foreground/78">
+      <div className="rounded-2xl border border-brand-primary/12 bg-brand-primary/5 px-4 py-3 text-sm text-foreground/78">
         <p className="font-semibold text-brand-primary">Usuario de prueba temporal</p>
         <p className="mt-1">
           Usuario: <span className="font-semibold">{testUsername}</span>
