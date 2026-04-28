@@ -3,7 +3,7 @@ import type {
   FilterPanelData,
   InventoryParameter,
   RadioOption,
-} from "@/components/home/types";
+} from "@/types/home/home.types";
 
 export const brandPanel: FilterPanelData = {
   title: "Marca",

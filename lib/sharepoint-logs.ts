@@ -1,71 +1,19 @@
 import "server-only";
 
+import type {
+  FolderTargetCacheEntry,
+  GraphTokenResponse,
+  SharePointConfig,
+  SharePointSyncResult,
+  SharedDriveItemResponse,
+  TokenCacheEntry,
+} from "@/types/sharepoint/sharepoint-logs.types";
+
 const GRAPH_API_BASE_URL = "https://graph.microsoft.com/v1.0";
 const GRAPH_TOKEN_SCOPE_DEFAULT = "https://graph.microsoft.com/.default";
 const TOKEN_EXPIRY_BUFFER_MS = 60_000;
 
-type TokenCacheEntry = {
-  accessToken: string;
-  cacheKey: string;
-  expiresAt: number;
-};
-
-type FolderTargetCacheEntry = {
-  driveId: string;
-  itemId: string;
-  shareUrl: string;
-};
-
-type SharePointConfig =
-  | {
-      authMode: "client_credentials";
-      clientId: string;
-      clientSecret: string;
-      scopes: string;
-      shareUrl: string;
-      tenantId: string;
-    }
-  | {
-      authMode: "ropc";
-      clientId: string;
-      clientSecret?: string;
-      password: string;
-      scopes: string;
-      shareUrl: string;
-      tenantId: string;
-      username: string;
-    };
-
-type GraphTokenResponse = {
-  access_token?: string;
-  error?: string;
-  error_description?: string;
-  expires_in?: number | string;
-  expires_on?: number | string;
-};
-
-type SharedDriveItemResponse = {
-  id?: string;
-  name?: string;
-  parentReference?: {
-    driveId?: string;
-  };
-  remoteItem?: {
-    id?: string;
-    parentReference?: {
-      driveId?: string;
-    };
-  };
-};
-
-export type SharePointSyncResult =
-  | {
-      skipped: true;
-      synced: false;
-    }
-  | {
-      synced: true;
-    };
+export type { SharePointSyncResult } from "@/types/sharepoint/sharepoint-logs.types";
 
 let cachedToken = null as TokenCacheEntry | null;
 let cachedFolderTarget = null as FolderTargetCacheEntry | null;

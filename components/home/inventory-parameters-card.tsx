@@ -1,5 +1,5 @@
 import { CheckIcon } from "@/components/home/home-icons";
-import type { InventoryParameter } from "@/components/home/types";
+import type { InventoryParameter } from "@/types/home/home.types";
 
 type InventoryParametersCardProps = {
   parameters: InventoryParameter[];

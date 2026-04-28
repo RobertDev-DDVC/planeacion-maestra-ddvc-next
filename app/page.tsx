@@ -1,6 +1,27 @@
+import { redirect } from "next/navigation";
 import { MasterPlanningPage } from "@/components/home/master-planning-page";
 import type { DimProductoPreviewItem } from "@/lib/fabric-dim-producto";
 import { getDimProductoPreview } from "@/lib/fabric-dim-producto";
+import {
+  getExpiredSessionRedirectPath,
+  getInvalidSessionRedirectPath,
+  readSession,
+} from "@/lib/session";
+
+// export default async function Page() {
+//   const session = await readSession();
+
+//   switch (session.status) {
+//     case "missing":
+//       redirect("/login");
+//     case "expired":
+//       redirect(getExpiredSessionRedirectPath());
+//     case "invalid":
+//       redirect(getInvalidSessionRedirectPath());
+//     case "authenticated":
+//       return <MasterPlanningPage currentUser={session.user} />;
+//   }
+
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +46,22 @@ async function loadDimProductoPreview(): Promise<DimProductoPreviewState> {
 
 export default async function Page() {
   const dimProductoPreview = await loadDimProductoPreview();
+  const session = await readSession();
 
-  return (
-    <MasterPlanningPage
-      dimProductoRows={dimProductoPreview.rows}
-      dimProductoErrorMessage={dimProductoPreview.errorMessage}
-    />
-  );
+  switch (session.status) {
+    case "missing":
+      redirect("/login");
+    case "expired":
+      redirect(getExpiredSessionRedirectPath());
+    case "invalid":
+      redirect(getInvalidSessionRedirectPath());
+    case "authenticated":
+      return <MasterPlanningPage currentUser={session.user} dimProductoRows={dimProductoPreview.rows} dimProductoErrorMessage={dimProductoPreview.errorMessage} />;
+  }
+  // return (
+  //   <MasterPlanningPage
+  //     dimProductoRows={dimProductoPreview.rows}
+  //     dimProductoErrorMessage={dimProductoPreview.errorMessage}
+  //   />
+  // );
 }

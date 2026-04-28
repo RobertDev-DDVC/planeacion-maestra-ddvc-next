@@ -1,5 +1,5 @@
 import { CheckIcon, ClearIcon, KebabIcon, SearchIcon } from "@/components/home/home-icons";
-import type { FilterPanelData } from "@/components/home/types";
+import type { FilterPanelData } from "@/types/home/home.types";
 
 type FilterPanelProps = {
   data: FilterPanelData;

@@ -1,4 +1,4 @@
-import type { RadioOption } from "@/components/home/types";
+import type { RadioOption } from "@/types/home/home.types";
 
 type RadioCardProps = {
   title: string;
