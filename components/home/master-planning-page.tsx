@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { ActionButtons } from "@/components/home/action-buttons";
+import { DimProductoPreview } from "@/components/home/dim-producto-preview";
 import { FilterPanel } from "@/components/home/filter-panel";
 import { InventoryParametersCard } from "@/components/home/inventory-parameters-card";
 import {
@@ -18,11 +19,24 @@ import { RadioCard } from "@/components/home/radio-card";
 import type { CurrentUser } from "@/types/home/home.types";
 import { exportPlanDdvcWorkbook } from "@/lib/plan-ddvc-export";
 
+import type { DimProductoPreviewItem } from "@/lib/fabric-dim-producto";
+
+// type MasterPlanningPageProps = {
+//   currentUser: CurrentUser;
+// };
+
+
 type MasterPlanningPageProps = {
+  readonly dimProductoRows: DimProductoPreviewItem[];
+  readonly dimProductoErrorMessage: string | null;
   currentUser: CurrentUser;
 };
 
-export function MasterPlanningPage({ currentUser }: MasterPlanningPageProps) {
+export function MasterPlanningPage({
+  dimProductoRows,
+  dimProductoErrorMessage,
+  currentUser
+}: MasterPlanningPageProps) {
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
@@ -87,6 +101,10 @@ export function MasterPlanningPage({ currentUser }: MasterPlanningPageProps) {
         {errorMessage ? (
           <p className="mt-4 text-sm font-medium text-rose-700">{errorMessage}</p>
         ) : null}
+        <DimProductoPreview
+          rows={dimProductoRows}
+          errorMessage={dimProductoErrorMessage}
+        />
         {warningMessage ? (
           <p className="mt-4 text-sm font-medium text-amber-700">
             {warningMessage}
